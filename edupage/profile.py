@@ -2,7 +2,9 @@ from json import dumps, loads
 from pathlib import Path
 
 from platformdirs import user_data_path
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+
+from edupage.utils import extend_domain
 
 
 class Profile(BaseModel):
@@ -24,6 +26,10 @@ class Profile(BaseModel):
         if not file.exists():
             return None
         return cls.model_validate({**loads(file.read_text()), "file": file})
+
+    @field_validator("domain", mode="after")
+    def validate_domain(cls, domain: str):
+        return extend_domain(domain)
 
 
 def get_file(name: str):

@@ -46,7 +46,7 @@ def request(
 ) -> Response:
     return session.request(
         method,
-        f"https://{domain}/{path}",
+        f"{domain}/{path}",
         headers={"Content-Type": "application/x-www-form-urlencoded"},
         data=encode_json({"rpcparams": dumps(data)}) if data else None
     )
